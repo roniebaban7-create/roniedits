@@ -1,4 +1,3 @@
-
 "use strict";
 
 // 1. Update the footer copyright year.
@@ -49,7 +48,6 @@ portfolioVideos.forEach((video) => {
 });
 
 // 4. Contact form.
-// Replace this with your real email address before publishing.
 const CONTACT_EMAIL = "roniebaban7@gmail.com";
 
 const contactForm = document.getElementById("contact-form");
@@ -70,10 +68,7 @@ if (contactForm && formMessage) {
       return;
     }
 
-    if (
-      !CONTACT_EMAIL ||
-      CONTACT_EMAIL === "roniebaban7@gmail.com"
-    ) {
+    if (!CONTACT_EMAIL) {
       formMessage.textContent =
         "Please configure CONTACT_EMAIL in script.js with your real email address before using this form.";
 
