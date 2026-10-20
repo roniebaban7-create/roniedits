@@ -47,55 +47,81 @@ portfolioVideos.forEach((video) => {
   });
 });
 
-// 4. Contact form.
-const CONTACT_EMAIL = "roniebaban7@gmail.com";
-
+// 4. Require matching email addresses on the contact form.
+const contactEmail = document.getElementById("client-email");
+const confirmEmail = document.getElementById("confirm-email");
 const contactForm = document.getElementById("contact-form");
 const formMessage = document.getElementById("form-message");
+const successModal = document.getElementById("success-modal");
+const successModalClose = document.getElementById("success-modal-close");
 
-if (contactForm && formMessage) {
-  contactForm.addEventListener("submit", (event) => {
+if (contactEmail && confirmEmail) {
+  const validateEmailMatch = () => {
+    const emailsMatch =
+      contactEmail.value.trim() === confirmEmail.value.trim();
+
+    confirmEmail.setCustomValidity(
+      emailsMatch ? "" : "Email addresses do not match."
+    );
+  };
+
+  contactEmail.addEventListener("input", validateEmailMatch);
+  confirmEmail.addEventListener("input", validateEmailMatch);
+}
+
+if (contactForm && formMessage && successModal instanceof HTMLDialogElement) {
+  const submitButton = contactForm.querySelector('button[type="submit"]');
+
+  successModalClose?.addEventListener("click", () => successModal.close());
+
+  successModal.addEventListener("close", () => {
+    submitButton?.focus();
+  });
+
+  contactForm.addEventListener("submit", async (event) => {
     event.preventDefault();
-
-    const formData = new FormData(contactForm);
-
-    const name = String(formData.get("name") || "").trim();
-    const email = String(formData.get("email") || "").trim();
-    const project = String(formData.get("project") || "").trim();
-    const details = String(formData.get("details") || "").trim();
 
     if (!contactForm.reportValidity()) {
       return;
     }
 
-    if (!CONTACT_EMAIL) {
-      formMessage.textContent =
-        "Please configure CONTACT_EMAIL in script.js with your real email address before using this form.";
-
-      return;
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = "SENDING...";
     }
+    formMessage.textContent = "Sending your message...";
 
-    const subject = encodeURIComponent(
-      `Video Editing Inquiry - ${project}`
-    );
+    try {
+      const response = await fetch(contactForm.action, {
+        method: "POST",
+        body: new FormData(contactForm),
+        headers: {
+          Accept: "application/json",
+        },
+      });
 
-    const body = encodeURIComponent(
-      `Hi Ronie,
+      if (!response.ok) {
+        throw new Error(`Form submission failed with status ${response.status}.`);
+      }
 
-My name: ${name}
-My email: ${email}
-Project type: ${project}
+      const result = await response.json();
 
-Project details:
-${details}
+      if (result.success !== true && result.success !== "true") {
+        throw new Error(result.message || "The form service did not accept the message.");
+      }
 
-Looking forward to discussing this project.`
-    );
-
-    formMessage.textContent =
-      "Opening your email app. Review your message and press Send to contact Ronie.";
-
-    window.location.href =
-      `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
+      contactForm.reset();
+      formMessage.textContent = "";
+      successModal.showModal();
+    } catch (error) {
+      console.error("Contact form submission failed:", error);
+      formMessage.textContent =
+        "We couldn't send your message. Please check your connection and try again.";
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = "SEND MESSAGE ↗";
+      }
+    }
   });
 }

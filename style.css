@@ -599,6 +599,39 @@ h3 {
   line-height: 1.7;
 }
 
+.success-modal {
+  width: min(440px, calc(100% - 36px));
+  margin: auto;
+  padding: 0;
+  border: 1px solid #343434;
+  border-radius: 7px;
+  background: var(--panel);
+  color: var(--text);
+}
+
+.success-modal::backdrop {
+  background: rgb(0 0 0 / 75%);
+}
+
+.success-modal-content {
+  display: grid;
+  gap: 14px;
+  padding: 30px;
+}
+
+.success-modal-content h2 {
+  line-height: 1.2;
+}
+
+.success-modal-content p:not(.eyebrow) {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.success-modal-content button {
+  margin-top: 6px;
+}
+
 /* FOOTER */
 
 .site-footer {
