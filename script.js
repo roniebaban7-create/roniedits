@@ -50,6 +50,7 @@ portfolioVideos.forEach((video) => {
 // 4. Require matching email addresses on the contact form.
 const contactEmail = document.getElementById("client-email");
 const confirmEmail = document.getElementById("confirm-email");
+const contactReplyTo = document.getElementById("client-replyto");
 const contactForm = document.getElementById("contact-form");
 const formMessage = document.getElementById("form-message");
 const successModal = document.getElementById("success-modal");
@@ -81,6 +82,14 @@ if (contactForm && formMessage && successModal instanceof HTMLDialogElement) {
   contactForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
+    if (contactEmail && confirmEmail) {
+      confirmEmail.setCustomValidity(
+        contactEmail.value.trim() === confirmEmail.value.trim()
+          ? ""
+          : "Email addresses do not match."
+      );
+    }
+
     if (!contactForm.reportValidity()) {
       return;
     }
@@ -92,12 +101,17 @@ if (contactForm && formMessage && successModal instanceof HTMLDialogElement) {
     formMessage.textContent = "Sending your message...";
 
     try {
+      if (contactEmail && contactReplyTo) {
+        contactReplyTo.value = contactEmail.value.trim();
+      }
+
       const response = await fetch(contactForm.action, {
         method: "POST",
-        body: new FormData(contactForm),
         headers: {
+          "Content-Type": "application/json",
           Accept: "application/json",
         },
+        body: JSON.stringify(Object.fromEntries(new FormData(contactForm))),
       });
 
       if (!response.ok) {
@@ -116,7 +130,7 @@ if (contactForm && formMessage && successModal instanceof HTMLDialogElement) {
     } catch (error) {
       console.error("Contact form submission failed:", error);
       formMessage.textContent =
-        "We couldn't send your message. Please check your connection and try again.";
+        "We couldn't confirm whether your message was sent. Check your inbox before trying again.";
     } finally {
       if (submitButton) {
         submitButton.disabled = false;

@@ -232,13 +232,14 @@
 
           <div class="form-field">
             <label for="client-email">YOUR EMAIL (SO WE CAN REPLY)</label>
-            <input id="client-email" name="_replyto" type="email"
+            <input id="client-email" name="email" type="email"
               required placeholder="you@example.com">
+            <input id="client-replyto" name="_replyto" type="hidden">
           </div>
 
           <div class="form-field">
             <label for="confirm-email">CONFIRM YOUR EMAIL</label>
-            <input id="confirm-email" name="email_confirmation" type="email"
+            <input id="confirm-email" type="email"
               required placeholder="Re-enter your email address">
           </div>
 
