@@ -219,7 +219,7 @@
           <p class="availability">AVAILABLE FOR FREELANCE PROJECTS</p>
         </div>
 
-        <form action="https://formsubmit.co/roniebaban7@gmail.com" method="POST" id="contact-form">
+        <form action="https://formsubmit.co/ajax/roniebaban7@gmail.com" method="POST" id="contact-form">
           <!-- Optional: Disables the default captcha if you want simpler submission -->
           <input type="hidden" name="_captcha" value="false">
           <!-- Custom subject line for incoming emails -->
@@ -231,9 +231,15 @@
           </div>
 
           <div class="form-field">
-            <label for="client-email">YOUR EMAIL</label>
-            <input id="client-email" name="email" type="email"
+            <label for="client-email">YOUR EMAIL (SO WE CAN REPLY)</label>
+            <input id="client-email" name="_replyto" type="email"
               required placeholder="you@example.com">
+          </div>
+
+          <div class="form-field">
+            <label for="confirm-email">CONFIRM YOUR EMAIL</label>
+            <input id="confirm-email" name="email_confirmation" type="email"
+              required placeholder="Re-enter your email address">
           </div>
 
           <div class="form-field">
@@ -257,7 +263,7 @@
             SEND MESSAGE ↗
           </button>
           <p class="form-message" id="form-message" aria-live="polite">
-            Your message will be sent directly to Ronie.
+            Your message goes to the configured inbox. Your email above is used as the reply address, so the recipient can respond directly to you.
           </p>
         </form>
       </div>
@@ -270,6 +276,17 @@
       <a href="#home">BACK TO TOP ↑</a>
     </div>
   </footer>
+
+  <dialog class="success-modal" id="success-modal" aria-labelledby="success-modal-title">
+    <div class="success-modal-content">
+      <p class="eyebrow">MESSAGE SENT</p>
+      <h2 id="success-modal-title">Thanks for reaching out!</h2>
+      <p>Your inquiry was sent successfully. Ronie can reply to the email address you provided.</p>
+      <button class="button button-primary" id="success-modal-close" type="button">
+        CLOSE
+      </button>
+    </div>
+  </dialog>
 
 </body>
 </html>
