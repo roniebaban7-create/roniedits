@@ -34,6 +34,36 @@ if (menuToggle && navLinks) {
   });
 }
 
+// Reveal page content as it enters the viewport.
+const reduceMotionPreference = window.matchMedia(
+  "(prefers-reduced-motion: reduce)"
+);
+
+if ("IntersectionObserver" in window && !reduceMotionPreference.matches) {
+  const revealTargets = document.querySelectorAll(
+    ".hero-copy, .hero-art-wrap, .section-heading, .section > .eyebrow, " +
+      ".section > h2, .project-card, .service-card, .skills-section > *, " +
+      ".contact-box, .site-footer"
+  );
+
+  const revealObserver = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.12, rootMargin: "0px 0px -35px 0px" }
+  );
+
+  revealTargets.forEach((target) => {
+    target.classList.add("scroll-reveal");
+    revealObserver.observe(target);
+  });
+}
+
 // 3. Pause other videos when one starts playing.
 const portfolioVideos = document.querySelectorAll(".video-frame video");
 
